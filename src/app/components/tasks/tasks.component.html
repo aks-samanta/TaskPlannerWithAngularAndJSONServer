@@ -1,0 +1,13 @@
+
+<app-add-task (onAddTask)="addTask($event)"></app-add-task>
+
+<h4 class="text-center p-4 border" *ngIf="this.tasks.length == 0; else elseBlock">No Tasks to display, Please add Tasks from above.</h4>
+<ng-template #elseBlock>
+    <app-task-item
+        *ngFor="let task of tasks"
+        [task]="task"
+        (onDeleteTask)="deleteTask(task)"
+        (onToggleReminder)="toggleReminder(task)">
+    </app-task-item>
+</ng-template>
+
