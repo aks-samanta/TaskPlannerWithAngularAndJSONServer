@@ -1,0 +1,9 @@
+<div class="filter-container ">
+  <span class="h5 mx-2 fw-normal align-baseline"> Filters :- </span>
+
+  <button class="btn btn-outline-danger mx-1" [ngClass]="{'active': activeFilter == 'overdue'}" (click)="filterTasks('overdue')">Overdue Tasks</button>
+  <button class="btn btn-outline-warning mx-1" [ngClass]="{'active': activeFilter == 'pending'}"  (click)="filterTasks('pending')">Pending Tasks</button>
+  <button class="btn btn-outline-success mx-1" [ngClass]="{'active': activeFilter == 'completed'}" (click)="filterTasks('completed')">Completed Tasks</button>
+  <button class="btn btn-success mx-1" (click)="filterTasks('')">All Tasks</button>
+
+</div>

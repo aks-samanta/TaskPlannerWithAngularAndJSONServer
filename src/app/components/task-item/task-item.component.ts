@@ -15,11 +15,14 @@ export class TaskItemComponent {
   faTimes = faTimes;
 
   onDelete(task: Task): void {
-    console.log(task);
-    this.onDeleteTask.emit(task);
+    var result = confirm("Are you sure you want to delete this item?");
+    if (result) {
+      this.onDeleteTask.emit(task);
+    }
   }
 
   onToggle(task: Task): void {
+
     this.onToggleReminder.emit(task);
   }
 }

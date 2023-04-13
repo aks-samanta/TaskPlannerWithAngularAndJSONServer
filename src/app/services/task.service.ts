@@ -3,11 +3,7 @@ import { Observable, } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Task } from 'src/app/Task';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'content-type': 'application/json'
-  })
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,27 +12,43 @@ const httpOptions = {
 
 export class TaskService {
 
-  private apiUrl = 'http://localhost:5000/tasks';
+  apiUrl: string = "http://localhost:8899/api/tasks";
 
+  getHttpHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'authorization': 'Bearer ' + sessionStorage.getItem("authToken"),
+      'content-type': 'application/json'
+    })
+  }
+  ngOnInit() {
 
+  }
 
   constructor(private http: HttpClient) { }
 
   getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.apiUrl);
+    const headers = this.getHttpHeaders();
+    return this.http.get<Task[]>(this.apiUrl, { headers });
   }
 
   deleteTask(task: Task): Observable<Task> {
+
     const url = `${this.apiUrl}/${task.id}`;
-    return this.http.delete<Task>(url);
+    const headers = this.getHttpHeaders();
+    return this.http.delete<Task>(url, { headers });
   }
 
   updateReminder(task: Task): Observable<Task> {
-    const url = `${this.apiUrl}/${task.id}`;
-    return this.http.put<Task>(url, task, httpOptions);
+    const url = `${this.apiUrl}/${task.id}/reminder`;
+    const headers = this.getHttpHeaders();
+
+    return this.http.put<Task>(url, task, { headers });
   }
 
   addTask(task: Task): Observable<Task> {
-    return this.http.post<Task>(this.apiUrl, task, httpOptions);
+    const headers = this.getHttpHeaders();
+    return this.http.post<Task>(this.apiUrl, task, { headers });
   }
+
+
 }

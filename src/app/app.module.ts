@@ -4,8 +4,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
+import { DatePipe } from "@angular/common";
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ButtonComponent } from './components/button/button.component';
@@ -14,7 +17,10 @@ import { TaskItemComponent } from './components/task-item/task-item.component';
 import { AddTaskComponent } from './components/add-task/add-task.component';
 import { AboutComponent } from './pages/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
-
+import { ProfileComponent } from './pages/profile/profile.component';
+import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
+import { FilterComponent } from './components/filter/filter.component';
 
 
 @NgModule({
@@ -26,16 +32,22 @@ import { FooterComponent } from './components/footer/footer.component';
     TaskItemComponent,
     AddTaskComponent,
     AboutComponent,
-    FooterComponent
+    FooterComponent,
+    ProfileComponent,
+    LoginComponent,
+    SignupComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

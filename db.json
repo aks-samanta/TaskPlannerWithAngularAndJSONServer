@@ -1,3 +1,28 @@
 {
-  "tasks": []
+  "tasks": [
+    {
+      "title": "Implement Login & Signup",
+      "description": "By Today",
+      "isComplete": false,
+      "deadline": "2023-04-14T10:33:00.000Z",
+      "id": 1,
+      "hasReminder": true
+    },
+    {
+      "title": "Correct the date time format and add calander to frontend",
+      "description": "by today",
+      "isComplete": false,
+      "deadline": "2023-04-14T10:33:00.000Z",
+      "id": 2,
+      "hasReminder": true
+    },
+    {
+      "title": "dddddddddddddd",
+      "description": "fffffffffffffffffffffff",
+      "isComplete": false,
+      "deadline": "2023-04-14T10:33:00.000Z",
+      "id": 3,
+      "hasReminder": true
+    }
+  ]
 }

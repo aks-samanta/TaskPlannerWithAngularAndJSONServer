@@ -1,0 +1,28 @@
+<div class="container mt-5 w-50">
+  <h2>Login</h2>
+  <div class="card p-3">
+  <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="form text-center">
+    <input type="text"
+          ngModel
+          name="username"
+          id="username"
+          placeholder="Enter your email"
+          class="form-control mb-3">
+    <input type="text"
+          ngModel
+          name="password"
+          id="password"
+          placeholder="Enter your password"
+          class="form-control mb-3">
+
+         
+
+    <input type="submit" value="Login" class="btn btn-success form-control mt-2 rounded-0">
+
+<div class="custom-spinner" *ngIf="isLoading"></div>
+
+
+  </form>
+    <div class="text-dark mt-2 text-center">New User? <a routerLink="/signup"> SignUp</a></div>
+  </div>
+</div>

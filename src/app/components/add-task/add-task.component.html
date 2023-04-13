@@ -1,15 +1,26 @@
-<form *ngIf="showAddTask" (ngSubmit)="onSubmit()">
+<form *ngIf="showAddTask" (ngSubmit)="onSubmit()" class="w-75 m-auto">
 
   <div class="form-group ">
-    <label for="text" class="col-form-label col-form-label-lg">Task</label>
-    <input type="text" class="form-control form-control-lg" name="text" [(ngModel)]="text" id="text"
-      placeholder="Add Task" />
+    <label for="title" class="col-form-label col-form-label-lg">Task Title</label>
+    <input type="text" class="form-control form-control-lg" name="title" [(ngModel)]="title" id="title"
+      placeholder="Add Task Title" />
   </div>
   <div class="form-group ">
-    <label for="day" class="col-form-label col-form-label-lg">Day & Time</label>
-    <input type="text" class="form-control form-control-lg" name="day" [(ngModel)]="day" id="day"
-      placeholder="Add Day & Time" />
+    <label for="titletitletitle" class="col-form-label col-form-label-lg">Details</label>
+    <input type="text" class="form-control form-control-lg" name="description" [(ngModel)]="description" id="description"
+      placeholder="Add Description" />
   </div>
+
+  <div class="form-group">
+    <label for="deadlineDate" class="col-form-label col-form-label-lg">Deadline Date</label>
+    <input type="date" class="form-control form-control-lg" name="deadlineDate" [(ngModel)]="deadlineDate" id="deadlineDate" />
+  </div>
+
+  <div class="form-group">
+    <label for="deadlineTime" class="col-form-label col-form-label-lg">Deadline Time</label>
+    <input type="time" class="form-control form-control-lg" name="deadlineTime" [(ngModel)]="deadlineTime" id="deadlineTime" />
+  </div>
+
   <div class="form-group form-check ">
     <input type="checkbox" class="form-check-input my-3" name="reminder" [(ngModel)]="reminder" id="reminder" />
     <label for="reminder" class="col-form-label col-form-label-lg form-check-label">Set Reminder</label>
