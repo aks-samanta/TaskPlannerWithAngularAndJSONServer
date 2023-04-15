@@ -1,8 +1,13 @@
 <div [ngClass]="{reminder:task.hasReminder}" class="task" (dblclick)="onToggle(task)">
-  <h3 class="d-flex justify-content-between">
+  <h3 [ngClass]="{'strikethrough': task.isComplete}" class="d-flex justify-content-between">
     {{task.title}}
     <fa-icon (click)="onDelete(task)" [ngStyle]="{color: 'red'}" [icon]="faTimes"></fa-icon>
   </h3>
-  <p> {{task.description}} </p>
-  <div class="deadline"> Deadline :  {{ task.deadline | date:'medium' }} </div>
+  <p [ngClass]="{'strikethrough':task.isComplete}" > {{task.description}} </p>
+
+  <div class="form-group form-scheck">
+    <input type="checkbox" class="form-check-input" id="markAsDone" (click)="onMarkAsDone(task)" [(ngModel)]="task.isComplete">
+    <label for="markAsDone" class="form-check-label mx-2">Mark As Done</label>
+  </div>
+  <div class="deadline"> Deadline : {{ task.deadline | date:'medium'}} </div>
 </div>

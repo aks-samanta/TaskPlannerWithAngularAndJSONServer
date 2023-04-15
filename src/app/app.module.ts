@@ -21,6 +21,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { FilterComponent } from './components/filter/filter.component';
+import { SortComponent } from './components/sort/sort.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { FilterComponent } from './components/filter/filter.component';
     ProfileComponent,
     LoginComponent,
     SignupComponent,
-    FilterComponent
+    FilterComponent,
+    SortComponent
   ],
   imports: [
     BrowserModule,

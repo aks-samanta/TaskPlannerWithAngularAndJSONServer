@@ -10,7 +10,7 @@ import { User } from '../User';
 })
 export class UserService {
 
-  Url: string = "http://localhost:8899/api/users"
+  Url: string = "https://taskplannerbackend-production.up.railway.app/api/users"
 
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Task } from 'src/app/Task';
 import { TaskService } from 'src/app/services/task.service';
@@ -33,8 +33,8 @@ export class TasksComponent {
   deleteTask(task: Task): void {
     this.taskService.deleteTask(task)
       .subscribe(
-        () => this.tasks = this.tasks.filter(
-          t => t.id !== task.id));
+        () => {this.tasks = this.tasks.filter(t => t.id !== task.id)
+          this.filteredTasks= this.tasks;});
   }
 
   toggleReminder(task: Task): void {
@@ -52,5 +52,13 @@ export class TasksComponent {
   displayFilteredTasks(filteredTasks:Task[]){
     this.filteredTasks = filteredTasks;
   }
+  displaySortedTasks(sortedTasks:Task[]){
+    this.filteredTasks = sortedTasks;
+  }
+  markAsDone(task: Task){
+    task.isComplete = !task.isComplete;
+    this.taskService.toggleDone(task).subscribe();
+  }
+
 
 }

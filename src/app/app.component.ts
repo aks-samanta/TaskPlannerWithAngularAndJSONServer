@@ -30,7 +30,7 @@ export class AppComponent {
     if(confirm("Are you sure you want to logout?")){
 
     sessionStorage.removeItem("isLoggedIn");
-    sessionStorage.removeItem("LoggedInUser");
+    sessionStorage.removeItem("loggedInUserDetails");
     sessionStorage.removeItem("authToken");
 
     this.uiService.updateIsLoggedIn(false); // Update isLoggedIn value

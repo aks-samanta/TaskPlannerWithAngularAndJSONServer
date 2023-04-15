@@ -1,0 +1,8 @@
+<div class="sort-container my-2">
+  <span class="h5 mx-2 fw-normal align-baseline "> Sort By :- </span>
+  <app-button
+            color="{{ !isSorted ? 'red' : 'green' }}" 
+            text="{{ !isSorted ? 'Urgent First' : 'Urgent Last' }}"
+            (btnClick)="!isSorted ? urgentFirstSort() : urgentLastSort()">
+  </app-button>
+</div>

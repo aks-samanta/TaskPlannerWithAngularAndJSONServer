@@ -1,16 +1,24 @@
 
 <app-add-task (onAddTask)="addTask($event)"></app-add-task>
+<div class="d-flex justify-content-between">
+<app-filter 
+        (onFilter)="displayFilteredTasks($event)" 
+        [allTasks]="tasks">
+</app-filter>
 
-<app-filter (onFilter)="displayFilteredTasks($event)" [allTasks]="tasks"></app-filter>
 
-
-<h4 class="text-center p-4 border mx-5" *ngIf="this.filteredTasks.length == 0; else elseBlock">No Tasks to display, Please add Tasks from above.</h4>
+<app-sort [filteredTasks]="filteredTasks" 
+          (onSort)="displaySortedTasks($event)">
+</app-sort>
+</div>
+<h4 class="text-center p-4 border mx-5" *ngIf="filteredTasks.length == 0; else elseBlock">No Tasks to display, Please add Tasks from above.</h4>
 <ng-template #elseBlock>
     <app-task-item
         *ngFor="let task of filteredTasks"
         [task]="task"
         (onDeleteTask)="deleteTask(task)"
-        (onToggleReminder)="toggleReminder(task)">
+        (onToggleReminder)="toggleReminder(task)"
+        (onMarkedAsDone)="markAsDone(task)">
     </app-task-item>
 </ng-template>
 
