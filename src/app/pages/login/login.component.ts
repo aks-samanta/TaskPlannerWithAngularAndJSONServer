@@ -1,5 +1,4 @@
-import { HttpHeaderResponse, HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
@@ -11,56 +10,63 @@ import { Subscription } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-
+export class LoginComponent implements OnInit {
   isLoading: boolean = false;
-
   isLoggedIn?: boolean;
   isLoggedInSubscription?: Subscription;
+  username!: string;
+  password!: string;
 
-  constructor(private userService: UserService, private router: Router, private uiService: UiService) {
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private uiService: UiService
+  ) {
     this.isLoggedInSubscription = this.uiService.isLoggedIn$.subscribe(value => {
       this.isLoggedIn = value;
     });
   }
 
-  ngOnInit() {
-    this.isLoggedIn = sessionStorage.getItem("isLoggedIn") == 'true';
+  ngOnInit(): void {
+    this.isLoggedIn = sessionStorage.getItem("isLoggedIn") === 'true';
   }
 
-  login(loginForm: NgForm) {
-    const username = loginForm.value.username;
-    const password = loginForm.value.password;
+  login(loginForm: NgForm): void {
+    if (loginForm.valid) {
+      const username: string = this.username;
+      const password: string = this.password;
 
-    this.isLoading = true;
-    this.userService.login(username, password).subscribe({
-      next: (v) => {
-        console.log(v.body);
+      this.isLoading = true;
+      this.userService.login(username, password).subscribe({
+        next: (response) => {
+          console.log(response.body);
 
-        this.isLoading = false; // Set isLoading to false to hide the spinner
+          this.isLoading = false; // Set isLoading to false to hide the spinner
 
-        sessionStorage.setItem('authToken', (v.headers.get("authorization")));
+          sessionStorage.setItem('authToken', response.headers.get("authorization") || '');
 
-        sessionStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('isLoggedIn', 'true');
 
-        sessionStorage.setItem('loggedInUserDetails', JSON.stringify(v.body));
+          sessionStorage.setItem('loggedInUserDetails', JSON.stringify(response.body));
 
-        this.uiService.updateIsLoggedIn(true);
+          this.uiService.updateIsLoggedIn(true);
 
-        this.router.navigate(['/']); // Redirect to home page
-      },
-      error: (e) => {
-        this.isLoading = false; // Set isLoading to false to hide the spinner
-        console.error(e)
-        alert("Invalid Credentials !!");
-      }, // Handle error
-      complete: () => {
-        console.info('complete')
-      }
-    })
-
-
-
+          this.router.navigate(['/']); // Redirect to home page
+        },
+        error: (error) => {
+          this.isLoading = false; // Set isLoading to false to hide the spinner
+          console.error(error);
+          alert("Invalid Credentials !!");
+        },
+        complete: () => {
+          console.info('complete');
+        }
+      });
+    } else {
+      // Mark all form controls as touched to display validation errors
+      Object.keys(loginForm.controls).forEach((key: string) => {
+        loginForm.controls[key].markAsTouched();
+      });
+    }
   }
 }
-

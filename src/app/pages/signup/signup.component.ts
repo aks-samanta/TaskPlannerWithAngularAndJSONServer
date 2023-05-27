@@ -1,99 +1,80 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/User';
 import { UserService } from 'src/app/services/user.service';
-
+import * as md5 from 'md5';
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent {
-
+  signUpForm!: FormGroup;
   isLoading: boolean = false;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
 
+  ngOnInit() {
+    this.signUpForm = this.formBuilder.group({
+      username: ['', [Validators.required, Validators.email]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      password: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)
+      ])]
+    });
   }
 
-  isValidEmail(email: string): boolean {
-    // Check if email is null or blank
-    if (!email || email.trim() == '') {
-      return false;
-    }
+  // Add form validation getters for convenient access in the template
+  get username() { return this.signUpForm.get('username'); }
+  get firstName() { return this.signUpForm.get('firstName'); }
+  get lastName() { return this.signUpForm.get('lastName'); }
+  get password() { return this.signUpForm.get('password'); }
 
-    // Regular expression to validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Test the email against the regular expression
-    return emailRegex.test(email);
-  }
 
-  isValidPassword(password: string): boolean {
-    // Password must be at least 8 characters long
-    if (password.length < 8) {
-      return false;
-    }
+  signUp() {
 
-    // Regular expressions for character classes
-    const lowercaseRegex = /[a-z]/;
-    const uppercaseRegex = /[A-Z]/;
-    const digitRegex = /\d/;
-    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
 
-    // Check if password contains at least one lowercase letter, one uppercase letter, one digit, and one special character
-    if (!lowercaseRegex.test(password) ||
-      !uppercaseRegex.test(password) ||
-      !digitRegex.test(password) ||
-      !specialCharRegex.test(password)) {
-      return false;
-    }
-
-    return true;
-  }
-  signUp(signUpForm: NgForm) {
-
-    this.isLoading = true;
-
-    if (!this.isValidEmail(signUpForm.value.username)) {
-      alert("Username must be a valid Email address.");
+    if (this.signUpForm.invalid) {
       return;
     }
-    if (!signUpForm.value.firstName || signUpForm.value.firstName.trim() == '') {
-      alert("First name cannot be null !!");
-      return;
-    }
-    if (!signUpForm.value.lastName || signUpForm.value.lastName.trim() == '') {
-      alert("Last name cannot be null !!");
-      return;
-    }
-    if (!this.isValidPassword(signUpForm.value.password)) {
-      alert("Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long");
-      return;
-    }
+
     const user: User = {
-      username: signUpForm.value.username,
-      firstName: signUpForm.value.firstName,
-      lastName: signUpForm.value.lastName,
-      password: signUpForm.value.password,
+      username: this.username!.value,
+      firstName: this.firstName!.value,
+      lastName: this.lastName!.value,
+      password: this.password!.value,
+      profileImageUrl: `https://www.gravatar.com/avatar/${md5(this.username!.value)}?d=mp`, // Construct the Gravatar URL with the MD5 hash of the email address
       role: 'ROLE_USER'
     }
 
+    this.isLoading = true;
     this.userService.signUp(user).subscribe({
-      next: (user: User) => {
+      next: (user) => {
         this.isLoading = false;
+        if (user.status === 400) {
+          alert("Sign Up failed: " + user.detail);
+          this.router.navigate(['/login']);
+          return;
+        }
         alert(user.username + " is registered successfully !! ");
         this.router.navigate(['/login']);
         console.log(user);
       },
-      error: (error: any) => {
+      error: (e) => {
         this.isLoading = false;
-        alert(error.message);
-        console.error(error);
+        alert("Sign Up failed: " + e.message);
+      },
+      complete: () => {
+        this.isLoading = false;
+        console.info('complete')
       }
     });
-
-
   }
 }
+
+

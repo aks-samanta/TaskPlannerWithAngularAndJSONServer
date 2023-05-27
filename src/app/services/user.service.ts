@@ -10,7 +10,7 @@ import { User } from '../User';
 })
 export class UserService {
 
-  Url: string = "https://taskplannerbackend-production.up.railway.app/api/users"
+  Url: string = "http://localhost:8080/api/users"
 
 
 
@@ -34,6 +34,15 @@ export class UserService {
       'content-type': 'application/json'
     })
     return this.http.post(this.Url + "/register", user,  {headers} )
+  }
+
+
+  updateUser(user: User): Observable<any> {
+    const headers = new HttpHeaders ({
+      'content-type': 'application/json',
+      'authorization': 'Bearer ' + sessionStorage.getItem("authToken")
+    })
+    return this.http.put(this.Url + "/update", user,  {headers} )
   }
 
 }

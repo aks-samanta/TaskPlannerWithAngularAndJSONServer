@@ -2,65 +2,80 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { Task } from 'src/app/Task';
 import { UiService } from 'src/app/services/ui.service';
 import { Subscription } from 'rxjs';
-import { DatePipe } from '@angular/common';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
-  styleUrls: ['./add-task.component.scss'],
-  providers: [
-    DatePipe // Add DatePipe to the providers array
-  ]
+  styleUrls: ['./add-task.component.scss']
 })
 export class AddTaskComponent {
 
   @Output() onAddTask = new EventEmitter<Task>();
-  title?: string;
-  description?: string;
-  reminder: boolean = false;
+  taskForm!: FormGroup;
   showAddTask: boolean = false;
   subscription?: Subscription;
-  deadlineDate?: Date;
-  deadlineTime?: string;
 
-  constructor(private uiService: UiService) {
+  constructor(private uiService: UiService, private formBuilder: FormBuilder) {
+
+  }
+
+  ngOnInit() {
     this.subscription = this.uiService.onToggle()
-      .subscribe((value) => this.showAddTask = value)
+      .subscribe((value) => this.showAddTask = value);
+
+    this.taskForm = this.formBuilder.group({
+      title: ['', Validators.required],
+      description: ['', Validators.maxLength(100)],
+      deadlineDate: ['', [Validators.required, this.validateDeadlineDate]],
+      deadlineTime: ['', [Validators.required, this.validateDeadlineTime]],
+      reminder: [false]
+    });
   }
 
   onSubmit() {
-    if (!this.title) {
-      alert('Please Add a Task!');
-      return;
-    }
-    if (!this.description) {
-      alert('Please Add Desciption/Details!');
-      return;
-    }
-    if (!this.deadlineDate) {
-      alert('Please select a Date!');
-      return;
-    }
-    if (!this.deadlineTime) {
-      alert('Please select a Time!');
+    if (this.taskForm.invalid) {
       return;
     }
 
     const newTask: Task = {
-      title:this.title,
-      description: this.description,
-      hasReminder:this.reminder,
-      isComplete:false,
-      deadline: new Date(this.deadlineDate + 'T' + this.deadlineTime),
+      title: this.taskForm.value.title,
+      description: this.taskForm.value.description,
+      hasReminder: this.taskForm.value.reminder,
+      isComplete: false,
+      deadline: new Date(this.taskForm.value.deadlineDate + 'T' + this.taskForm.value.deadlineTime),
       createdAt: new Date()
-    }
+    };
 
     this.onAddTask.emit(newTask);
 
-    this.title = '',
-      this.description = '',
-      this.reminder = false;
-    this.deadlineDate = new Date();
-    this.deadlineTime='';
+    this.taskForm.reset();
+  }
+
+  validateDeadlineDate(control: FormControl) {
+    const selectedDate = new Date(control.value);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < currentDate) {
+      return { pastDate: true };
+    }
+
+    return null;
+  }
+
+  validateDeadlineTime(control: FormControl) {
+    const selectedTime = new Date(control.value);
+    const currentTime = new Date();
+
+    if (selectedTime < currentTime) {
+      return { pastTime: true };
+    }
+
+    return null;
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
   }
 }

@@ -1,25 +1,126 @@
+<div class="container mt-5 ">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="profile-container">
+        <div class="profile-image d-flex justify-content-between align-items-center p-2">
+          <!-- Display user profile image here -->
+          <img [src]="user.profileImageUrl || 'assets/images/default-profile-image.jpg'" alt="User Profile Image"
+     class="w-50 h-50 rounded-circle">
 
-<div class="d-flex m-auto bg-light">
-<table class="table text-center table-striped table-hover table-responsive table-striped table-bordered table-hover">
- 
-    <tr>
-      <th>User Id</th>
-      <td>{{user.id}}</td>
-    </tr>
+          <!-- Button to trigger edit mode -->
+          <button class="btn btn-primary edit-button mt-2" (click)="toggleEditMode()" [ngClass]="{'btn-danger': editMode}">
+            {{ editMode ? 'Cancel' : 'Edit' }}
+          </button>
+                  </div>
 
-    <tr>
-      <th>First Name</th>
-      <td>{{user.firstName}}</td>
-    </tr>
 
-    <tr>
-      <th>Last Name</th>
-      <td>{{user.lastName}}</td>
-    </tr>
+                  <div class="profile-details" *ngIf="!editMode">
+                    <ul class="list-group justify-content-center">
+                      <li class="list-group-item list-group-item-dark">
+                        <div class="row ">
+                          <div class="col-sm-4">
+                            <strong>User Id:</strong>
+                          </div>
+                          <div class="col-sm-8">
+                            {{ user.id }}
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-dark">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <strong>Email:</strong>
+                          </div>
+                          <div class="col-sm-8">
+                            {{ user.username }}
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-dark">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <strong>First Name:</strong>
+                          </div>
+                          <div class="col-sm-8">
+                            {{ user.firstName }}
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-dark">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <strong>Last Name:</strong>
+                          </div>
+                          <div class="col-sm-8">
+                            {{ user.lastName }}
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item list-group-item-dark">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <strong>Role:</strong>
+                          </div>
+                          <div class="col-sm-8">
+                            {{ user.role }}
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
 
-    <tr>
-      <th>Role</th>
-      <td>{{user.role}}</td>
-    </tr>
-</table>
+
+
+        <div class="edit-formp-4 m-4" *ngIf="editMode">
+          <h2>Edit Profile</h2>
+          <form [formGroup]="profileForm" (submit)="updateProfile()" class="form ">
+            <label for="username">Username</label>
+            <input type="email" formControlName="username" [disabled]="true" class="form-control mb-3">
+            <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="text-danger">
+              <div *ngIf="username?.errors?.['required']">Username is required.</div>
+              <div *ngIf="username?.errors?.['email']">Invalid email format.</div>
+            </div>
+
+            <label for="firstName">First Name</label>
+            <input type="text" formControlName="firstName" placeholder="Enter your firstName" class="form-control mb-3">
+            <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)" class="text-danger">
+              <div *ngIf="firstName?.errors?.['required']">First name is required.</div>
+            </div>
+
+            <label for="lastName">Last Name</label>
+            <input type="text" formControlName="lastName" placeholder="Enter your lastName" class="form-control mb-3">
+            <div *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)" class="text-danger">
+              <div *ngIf="lastName?.errors?.['required']">Last name is required.</div>
+            </div>
+
+            <label for="password">Password</label>
+            <input type="password" formControlName="password" placeholder="Enter your password"
+              class="form-control mb-3">
+            <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="text-danger">
+              <div *ngIf="password?.errors?.['required']">Password is required.</div>
+              <div *ngIf="password?.errors?.['minlength']">Password should be at least 8 characters long.</div>
+              <div *ngIf="password?.errors?.['pattern']">
+                Password must contain at least one lowercase letter, one uppercase letter, one digit, one special
+                character,
+                and be at least 8 characters long.
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="profileImage">Profile Image</label>
+              <br>
+              <input type="file" id="profileImage" name="profileImage" (change)="handleProfileImageChange($event)"
+                accept="image/*" class="form-control-file mb-3">
+            </div>
+
+            <div class="custom-spinner" *ngIf="isUpdating || isPictureUploading"></div>
+
+            <input type="submit" value="Update" [disabled]="!profileForm.valid || isPictureUploading || isUpdating"
+              class="btn btn-success form-control mt-5 rounded-0 text-white">
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
