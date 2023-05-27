@@ -18,30 +18,45 @@ export class ProfileComponent implements OnInit {
   isPictureUploading = false;
   isUpdating = false;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private userService: UserService, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.profileForm = this.formBuilder.group({
       firstName: [this.user.firstName || '', Validators.required],
       lastName: [this.user.lastName || '', Validators.required],
       username: [{ value: this.user.username, disabled: true }],
-      password: ['', Validators.compose([
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)
-      ])],
-      profileImage: ['', [ this.validateFileSize]] // 1 MB = 1048576 bytes
+      password: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)
+        ])
+      ],
+      profileImage: ['', [this.validateFileSize]] // 1 MB = 1048576 bytes
     });
-
-
-
   }
 
-  get username() { return this.profileForm.get('username'); }
-  get firstName() { return this.profileForm.get('firstName'); }
-  get lastName() { return this.profileForm.get('lastName'); }
-  get password() { return this.profileForm.get('password'); }
+  // Getters for form controls
+  get username() {
+    return this.profileForm.get('username');
+  }
+  get firstName() {
+    return this.profileForm.get('firstName');
+  }
+  get lastName() {
+    return this.profileForm.get('lastName');
+  }
+  get password() {
+    return this.profileForm.get('password');
+  }
 
+  // Custom validator for file size
   validateFileSize(control: FormControl) {
     const file = control.value;
 
@@ -55,7 +70,7 @@ export class ProfileComponent implements OnInit {
     return null;
   }
 
-
+  // Toggle edit mode
   toggleEditMode() {
     this.editMode = !this.editMode;
     // Reset form values when exiting edit mode
@@ -64,49 +79,47 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-
+  // Check if a field is invalid
   isFieldInvalid(fieldName: string) {
     const formControl = this.profileForm.get(fieldName);
     return formControl?.invalid && (formControl.touched || formControl.dirty);
   }
 
+  // Update profile
   updateProfile() {
-  this.isUpdating = true;
-      // Perform update logic and save user details
-      this.user.firstName = this.profileForm.controls['firstName'].value;
-      this.user.lastName = this.profileForm.controls['lastName'].value;
-      this.user.password = this.profileForm.controls['password'].value;
-      // this.user.profileImageUrl = this.getProfileImageUrl();
+    this.isUpdating = true;
 
-      this.userService.updateUser(this.user).subscribe({
-        next: (user) => {
-          if (user.status === 400) {
-            alert(" Update failed: " + user.detail);
-            return;
-          }
-          alert(user.username + " is updated successfully !! ");
-          this.router.navigate(['/profile']);
-          this.user = user;
-          this.toggleEditMode();
-          sessionStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
-          console.log(user);
-          this.isUpdating = false;
+    // Perform update logic and save user details
+    this.user.firstName = this.profileForm.controls['firstName'].value;
+    this.user.lastName = this.profileForm.controls['lastName'].value;
+    this.user.password = this.profileForm.controls['password'].value;
 
-        },
-        error: (e) => {
-          this.isUpdating = false;
-          alert("Update failed: " + e.message);
-        },
-        complete: () => {
-          console.info('complete')
-          this.isUpdating = false;
+    this.userService.updateUser(this.user).subscribe({
+      next: (user) => {
+        if (user.status === 400) {
+          alert(" Update failed: " + user.detail);
+          return;
         }
-      })
-
-
+        alert(user.username + " is updated successfully !! ");
+        this.router.navigate(['/profile']);
+        this.user = user;
+        this.toggleEditMode();
+        sessionStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
+        console.log(user);
+        this.isUpdating = false;
+      },
+      error: (e) => {
+        this.isUpdating = false;
+        alert("Update failed: " + e.message);
+      },
+      complete: () => {
+        console.info('complete');
+        this.isUpdating = false;
+      }
+    });
   }
 
-
+  // Handle profile image change
   handleProfileImageChange(event: any) {
     this.isPictureUploading = true;
     const file = event.target.files[0];
@@ -123,7 +136,7 @@ export class ProfileComponent implements OnInit {
 
     // Make the POST request to upload the file
     this.http.post(uploadUrl, formData).subscribe({
-      next: ((response: any) => {
+      next: (response: any) => {
         // Handle the response from Cloudinary
         // Extract the URL of the uploaded image from the response
         const imageUrl = response.url;
@@ -132,14 +145,12 @@ export class ProfileComponent implements OnInit {
         this.user.profileImageUrl = imageUrl;
         sessionStorage.setItem('loggedInUserDetails', JSON.stringify(this.user));
         this.isPictureUploading = false;
-      }),
-      error: ((error: any) => {
+      },
+      error: (error: any) => {
         // Handle the error if the upload fails
         this.isPictureUploading = false;
         console.error('Error uploading file to Cloudinary:', error);
-      })
-    }
-    );
+      }
+    });
   }
-
 }

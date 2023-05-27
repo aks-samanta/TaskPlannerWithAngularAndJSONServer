@@ -1,4 +1,7 @@
+<!-- Add Task Form -->
 <form *ngIf="showAddTask" [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="w-75 m-auto">
+
+  <!-- Task Title -->
   <div class="form-group">
     <label for="title" class="col-form-label col-form-label-lg">Task Title</label>
     <input type="text" class="form-control form-control-lg" formControlName="title" id="title" placeholder="Add Task Title" />
@@ -6,6 +9,8 @@
       Title is required.
     </div>
   </div>
+
+  <!-- Task Description -->
   <div class="form-group">
     <label for="description" class="col-form-label col-form-label-lg">Details</label>
     <input type="text" class="form-control form-control-lg" formControlName="description" id="description" placeholder="Add Description" />
@@ -13,6 +18,8 @@
       Description must be less than 100 characters.
     </div>
   </div>
+
+  <!-- Deadline Date -->
   <div class="form-group">
     <label for="deadlineDate" class="col-form-label col-form-label-lg">Deadline Date</label>
     <input type="date" class="form-control form-control-lg" formControlName="deadlineDate" id="deadlineDate" />
@@ -20,6 +27,8 @@
       Deadline Date is required and must be today or future.
     </div>
   </div>
+
+  <!-- Deadline Time -->
   <div class="form-group">
     <label for="deadlineTime" class="col-form-label col-form-label-lg">Deadline Time</label>
     <input type="time" class="form-control form-control-lg" formControlName="deadlineTime" id="deadlineTime" />
@@ -27,9 +36,14 @@
       Deadline Time is required and must be future.
     </div>
   </div>
+
+  <!-- Set Reminder Checkbox -->
   <div class="form-group form-check">
     <input type="checkbox" class="form-check-input my-3" formControlName="reminder" id="reminder" />
     <label for="reminder" class="col-form-label col-form-label-lg form-check-label">Set Reminder</label>
   </div>
+
+  <!-- Submit Button -->
   <input type="submit" value="Save Task" [disabled]="taskForm.invalid" class="btn btn-primary">
+
 </form>

@@ -44,12 +44,10 @@ export class LoginComponent implements OnInit {
           this.isLoading = false; // Set isLoading to false to hide the spinner
 
           sessionStorage.setItem('authToken', response.headers.get("authorization") || '');
-
           sessionStorage.setItem('isLoggedIn', 'true');
-
           sessionStorage.setItem('loggedInUserDetails', JSON.stringify(response.body));
 
-          this.uiService.updateIsLoggedIn(true);
+          this.uiService.updateIsLoggedIn(true); // To change the login button to logout.
 
           this.router.navigate(['/']); // Redirect to home page
         },
