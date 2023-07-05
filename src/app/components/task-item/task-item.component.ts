@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from 'src/app/Task';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-task-item',
@@ -13,9 +13,15 @@ export class TaskItemComponent {
   @Output() onDeleteTask: EventEmitter<any> = new EventEmitter();
   @Output() onToggleReminder: EventEmitter<Task> = new EventEmitter<Task>();
   @Output() onMarkedAsDone: EventEmitter<Task> = new EventEmitter;
-  faTimes = faTimes;
+  @Output() onEditTask: EventEmitter<Task> = new EventEmitter<Task>();
+  @Output() afterEdit: EventEmitter<Task> = new EventEmitter<Task>();
 
-  onDelete(task:Task): void {
+  faTrashAlt = faTrashAlt;
+  faEdit = faEdit;
+  faTimes = faTimes;
+  taskEditMode = false;
+
+  onDelete(task: Task): void {
     var result = confirm("Are you sure you want to delete this item?");
     if (result) {
       this.onDeleteTask.emit(task);
@@ -27,7 +33,26 @@ export class TaskItemComponent {
     this.onToggleReminder.emit(task);
   }
 
-  onMarkAsDone(task:Task): void {  
-    this.onMarkedAsDone.emit(task); 
+  onMarkAsDone(task: Task): void {
+    this.onMarkedAsDone.emit(task);
   }
+
+  onEdit(task: Task): void {
+    this.taskEditMode = !this.taskEditMode;
+
+
+    this.onEditTask.emit(task);
+  }
+
+  afterEditing(editedTask:Task) {
+   this.taskEditMode = false;
+   this.task.deadline = editedTask.deadline;
+   this.task.hasReminder = editedTask.hasReminder;
+   this.task.isComplete = editedTask.isComplete;
+   this.task.title = editedTask.title;
+   this.task.description = editedTask.description;
+    console.log(this.task);
+    this.afterEdit.emit(editedTask)
+  }
+
 }

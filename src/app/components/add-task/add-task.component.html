@@ -1,49 +1,44 @@
-<!-- Add Task Form -->
-<form *ngIf="showAddTask" [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="w-75 m-auto">
-
-  <!-- Task Title -->
-  <div class="form-group">
+<form *ngIf="showAddTask" [formGroup]="taskForm" (ngSubmit)="onSubmit()" class=" m-auto border p-3 border-primary my-3 mb-5">
+  <div class="d-flex justify-content-between">
+  <div class="form-group w-50 mx-2">
     <label for="title" class="col-form-label col-form-label-lg">Task Title</label>
-    <input type="text" class="form-control form-control-lg" formControlName="title" id="title" placeholder="Add Task Title" />
+    <input type="text" class="form-control " formControlName="title" id="title" placeholder="Add Task Title" />
     <div *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched" class="text-danger">
       Title is required.
     </div>
   </div>
-
-  <!-- Task Description -->
-  <div class="form-group">
+  <div class="form-group w-50 mx-2">
     <label for="description" class="col-form-label col-form-label-lg">Details</label>
-    <input type="text" class="form-control form-control-lg" formControlName="description" id="description" placeholder="Add Description" />
+    <textarea class="form-control " formControlName="description" id="description" placeholder="Add Description"></textarea>
     <div *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched" class="text-danger">
       Description must be less than 100 characters.
     </div>
   </div>
+</div>
 
-  <!-- Deadline Date -->
-  <div class="form-group">
+  <div class="d-flex justify-content-between">
+  <div class="form-group w-50 mx-2">
     <label for="deadlineDate" class="col-form-label col-form-label-lg">Deadline Date</label>
     <input type="date" class="form-control form-control-lg" formControlName="deadlineDate" id="deadlineDate" />
     <div *ngIf="taskForm.get('deadlineDate')?.invalid && taskForm.get('deadlineDate')?.touched" class="text-danger">
       Deadline Date is required and must be today or future.
     </div>
   </div>
-
-  <!-- Deadline Time -->
-  <div class="form-group">
+  <div class="form-group w-50 mx-2">
     <label for="deadlineTime" class="col-form-label col-form-label-lg">Deadline Time</label>
-    <input type="time" class="form-control form-control-lg" formControlName="deadlineTime" id="deadlineTime" />
+    <input type="time" class="form-control form-control-lg " formControlName="deadlineTime" id="deadlineTime" />
     <div *ngIf="taskForm.get('deadlineTime')?.invalid && taskForm.get('deadlineTime')?.touched" class="text-danger">
       Deadline Time is required and must be future.
     </div>
   </div>
+  </div>
 
-  <!-- Set Reminder Checkbox -->
-  <div class="form-group form-check">
+
+  <div class="d-flex justify-content-between">
+  <div class="form-group form-check m-2 mt-4">
     <input type="checkbox" class="form-check-input my-3" formControlName="reminder" id="reminder" />
     <label for="reminder" class="col-form-label col-form-label-lg form-check-label">Set Reminder</label>
   </div>
-
-  <!-- Submit Button -->
-  <input type="submit" value="Save Task" [disabled]="taskForm.invalid" class="btn btn-primary">
-
+  <input type="submit" value="Save Task" [disabled]="taskForm.invalid" class="btn btn-primary mx-2">
+</div>
 </form>

@@ -10,7 +10,7 @@
   z-index: 9999;
 }
 
-@media (max-width: 1006px) {
+@media (max-width: 576px) {
   .profile-image {
     transform: none !important;
     position: static !important;
@@ -18,4 +18,4 @@
     left: auto !important;
     z-index: 1 !important;
   }
-}
+}/*# sourceMappingURL=profile.component.css.map */

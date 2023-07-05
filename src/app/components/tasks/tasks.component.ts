@@ -12,6 +12,8 @@ import { TaskService } from 'src/app/services/task.service';
 export class TasksComponent {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
+
+
   constructor(private taskService: TaskService, private router : Router) { }
 
   ngOnInit(): void {
@@ -20,7 +22,7 @@ export class TasksComponent {
             this.tasks = data;
             this.filteredTasks = data;
           },
-          error: (error) => { 
+          error: (error) => {
             console.log(error);
             if(error.status == 401){
             alert("Please Login To Continue !!");
@@ -59,6 +61,38 @@ export class TasksComponent {
     task.isComplete = !task.isComplete;
     this.taskService.toggleDone(task).subscribe();
   }
+
+  afterEditing(editedTask: any) {
+    console.log(editedTask);
+    this.taskService.editTask(editedTask).subscribe( {
+      next: (task) => {
+        this.filteredTasks.forEach(tsk => {
+         if(tsk.id === task.id){
+              tsk.deadline = task.deadline;
+              tsk.hasReminder = task.hasReminder;
+              tsk.isComplete = task.isComplete;
+              tsk.title = task.title;
+              tsk.description = task.description;
+          };
+        })
+        this.tasks.forEach(tsk => {
+         if(tsk.id === task.id){
+              tsk.deadline = task.deadline;
+              tsk.hasReminder = task.hasReminder;
+              tsk.isComplete = task.isComplete;
+              tsk.title = task.title;
+              tsk.description = task.description;
+          };
+        })
+        alert(task.title + " updated successfully !!");
+      },
+      error: (error: any) => {
+        console.log(error);
+        alert("Update Failed please try again !!");
+      }
+    })
+  }
+
 
 
 }

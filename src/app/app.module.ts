@@ -22,6 +22,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { FilterComponent } from './components/filter/filter.component';
 import { SortComponent } from './components/sort/sort.component';
+import { EditTaskComponent } from './components/task-item/edit-task/edit-task.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { SortComponent } from './components/sort/sort.component';
     LoginComponent,
     SignupComponent,
     FilterComponent,
-    SortComponent
+    SortComponent,
+    EditTaskComponent
   ],
   imports: [
     BrowserModule,

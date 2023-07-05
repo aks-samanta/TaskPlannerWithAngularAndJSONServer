@@ -1,29 +1,29 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Task } from 'src/app/Task';
 import { UiService } from 'src/app/services/ui.service';
+import { Subscription } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-task',
   templateUrl: './add-task.component.html',
   styleUrls: ['./add-task.component.scss']
 })
-export class AddTaskComponent implements OnInit, OnDestroy {
+export class AddTaskComponent {
+
   @Output() onAddTask = new EventEmitter<Task>();
   taskForm!: FormGroup;
   showAddTask: boolean = false;
-  private subscription?: Subscription;
+  subscription?: Subscription;
 
-  constructor(private uiService: UiService, private formBuilder: FormBuilder) {}
+  constructor(private uiService: UiService, private formBuilder: FormBuilder) {
+
+  }
 
   ngOnInit() {
-    // Subscribe to toggle event
-    this.subscription = this.uiService.onToggle().subscribe((value) => {
-      this.showAddTask = value;
-    });
+    this.subscription = this.uiService.onToggle()
+      .subscribe((value) => this.showAddTask = value);
 
-    // Initialize taskForm with form controls and validators
     this.taskForm = this.formBuilder.group({
       title: ['', Validators.required],
       description: ['', Validators.maxLength(100)],
@@ -38,7 +38,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Create a new task object from form values
     const newTask: Task = {
       title: this.taskForm.value.title,
       description: this.taskForm.value.description,
@@ -48,10 +47,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       createdAt: new Date()
     };
 
-    // Emit the new task using the onAddTask event
     this.onAddTask.emit(newTask);
 
-    // Reset the form after submission
     this.taskForm.reset();
   }
 
@@ -79,7 +76,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Unsubscribe from the toggle event to avoid memory leaks
     this.subscription?.unsubscribe();
   }
 }

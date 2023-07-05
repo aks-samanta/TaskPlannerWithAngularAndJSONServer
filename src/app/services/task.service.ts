@@ -12,7 +12,7 @@ import { Task } from 'src/app/Task';
 
 export class TaskService {
 
-  apiUrl: string = "http://localhost:8080/api/tasks";
+  apiUrl: string = "https://taskplanner-aks-samanta.up.railway.app/api/tasks";
 
   getHttpHeaders(): HttpHeaders {
     return new HttpHeaders({
@@ -56,5 +56,14 @@ export class TaskService {
     const headers = this.getHttpHeaders();
 
     return this.http.put<Task>(url, task, { headers });
+  }
+
+  editTask(editedTask:Task):  Observable<Task>{
+    const url = `${this.apiUrl}/update/${editedTask.id}`;
+    console.log(editedTask);
+    const headers = this.getHttpHeaders();
+
+    return this.http.put<Task>(url, editedTask, { headers });
+
   }
 }

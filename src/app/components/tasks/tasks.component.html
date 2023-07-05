@@ -1,13 +1,13 @@
 
 <app-add-task (onAddTask)="addTask($event)"></app-add-task>
 <div class="d-flex justify-content-between">
-<app-filter 
-        (onFilter)="displayFilteredTasks($event)" 
+<app-filter
+        (onFilter)="displayFilteredTasks($event)"
         [allTasks]="tasks">
 </app-filter>
 
 
-<app-sort [filteredTasks]="filteredTasks" 
+<app-sort [filteredTasks]="filteredTasks"
           (onSort)="displaySortedTasks($event)">
 </app-sort>
 </div>
@@ -18,7 +18,10 @@
         [task]="task"
         (onDeleteTask)="deleteTask(task)"
         (onToggleReminder)="toggleReminder(task)"
-        (onMarkedAsDone)="markAsDone(task)">
+        (onMarkedAsDone)="markAsDone(task)"
+        (afterEdit)="afterEditing($event)">
     </app-task-item>
+
+
 </ng-template>
 

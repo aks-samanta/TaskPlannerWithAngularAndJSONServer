@@ -10,7 +10,7 @@ import { User } from '../User';
 })
 export class UserService {
 
-  Url: string = "http://localhost:8080/api/users"
+  Url: string = "https://taskplanner-aks-samanta.up.railway.app/api/users"
 
 
 
@@ -30,19 +30,19 @@ export class UserService {
   }
 
   signUp(user: User): Observable<any> {
-    const headers = new HttpHeaders ({
+    const headers = new HttpHeaders({
       'content-type': 'application/json'
     })
-    return this.http.post(this.Url + "/register", user,  {headers} )
+    return this.http.post(this.Url + "/register", user, { headers })
   }
 
 
   updateUser(user: User): Observable<any> {
-    const headers = new HttpHeaders ({
+    const headers = new HttpHeaders({
       'content-type': 'application/json',
       'authorization': 'Bearer ' + sessionStorage.getItem("authToken")
     })
-    return this.http.put(this.Url + "/update", user,  {headers} )
+    return this.http.put(this.Url + "/update", user, { headers })
   }
 
 }

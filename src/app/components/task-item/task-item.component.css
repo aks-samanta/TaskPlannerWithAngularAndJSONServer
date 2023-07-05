@@ -1,0 +1,23 @@
+.reminder {
+  border-left: 7px solid rgb(0, 178, 0);
+}
+
+.task {
+  background-color: rgba(64, 64, 64, 0.8);
+  padding: 2% 4%;
+  margin: 2%;
+  border-radius: 1em;
+}
+
+.deadline {
+  color: yellow;
+  font-weight: 400;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+  text-decoration-color: red;
+  text-decoration-thickness: 5px;
+}/*# sourceMappingURL=task-item.component.css.map */

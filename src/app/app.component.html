@@ -10,7 +10,7 @@
         <li class="nav-item">
           <a class="nav-link " aria-current="page" routerLink="/">Home</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link" routerLink="profile">Profile</a>
         </li>
         <li class="nav-item">
@@ -20,23 +20,26 @@
 
       <!-- <button class="btn btn-success" routerLink="login">Login/SignUp</button>
       <button class="btn btn-danger">Logout</button> -->
-
-      <app-button
-            
-            color="{{ isLoggedIn ? 'red' : 'green' }}" 
-            text="{{ isLoggedIn ? 'Logout' : 'Login/Signup' }}"
-            (btnClick)="isLoggedIn ? logout() : redirectToLogin()">
-      </app-button>
-
+      <div class="d-flex justify-content-between">
+        <a *ngIf="isLoggedIn" routerLink="/profile">
+          <img class="profile-picture rounded-circle mx-4 border border-success " [src]="loggedInUser.profileImageUrl"
+            alt="User Profile Picture" width="40" height="40">
+        </a>
+        <app-button color="{{ isLoggedIn ? 'red' : 'green' }}" text="{{ isLoggedIn ? 'Logout' : 'Login/Signup' }}"
+          (btnClick)="isLoggedIn ? logout() : redirectToLogin()">
+        </app-button>
+      </div>
 
     </div>
   </div>
 </nav>
 <div class="container">
+  <div class="container text-center" *ngIf="isLoggedIn == false || isLoggedIn == null">
+    <h2 class="text-danger">Please login to continue !!</h2>
+  </div>
 
-  <app-header></app-header>
+  <app-header *ngIf="isLoggedIn"></app-header>
 
   <router-outlet></router-outlet>
-
   <app-footer></app-footer>
 </div>

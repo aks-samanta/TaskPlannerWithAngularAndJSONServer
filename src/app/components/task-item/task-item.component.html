@@ -1,7 +1,10 @@
 <div [ngClass]="{reminder:task.hasReminder}" class="task" (dblclick)="onToggle(task)">
   <h3 [ngClass]="{'strikethrough': task.isComplete}" class="d-flex justify-content-between">
     {{task.title}}
-    <fa-icon (click)="onDelete(task)" [ngStyle]="{color: 'red'}" [icon]="faTimes"></fa-icon>
+    <div>
+    <fa-icon class="mx-3" (click)="onEdit(task)" [ngStyle]="{ color: 'rgb(135, 166, 290, 1)', cursor: 'pointer' }" [icon]="faEdit"></fa-icon>
+    <fa-icon (click)="onDelete(task)" [ngStyle]="{color: 'red', cursor: 'pointer'}" [icon]="faTrashAlt "></fa-icon>
+  </div>
   </h3>
   <p [ngClass]="{'strikethrough':task.isComplete}" > {{task.description}} </p>
 
@@ -10,4 +13,7 @@
     <label for="markAsDone" class="form-check-label mx-2">Mark As Done</label>
   </div>
   <div class="deadline"> Deadline : {{ task.deadline | date:'medium'}} </div>
+
+  <app-edit-task [taskToBeEdited]="task" *ngIf="taskEditMode" (taskEdited)="afterEditing($event)"></app-edit-task>
+
 </div>

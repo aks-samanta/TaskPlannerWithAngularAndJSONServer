@@ -13,19 +13,20 @@ import { UserService } from 'src/app/services/user.service';
 export class ProfileComponent implements OnInit {
   profileForm!: FormGroup;
   editMode: boolean = false;
-  loggedInUserDetails = sessionStorage.getItem('loggedInUserDetails');
-  user: User = this.loggedInUserDetails ? JSON.parse(this.loggedInUserDetails) : {};
   isPictureUploading = false;
   isUpdating = false;
-
+  user!: User;
   constructor(
     private http: HttpClient,
     private formBuilder: FormBuilder,
     private userService: UserService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
+    const loggedInUserDetails = sessionStorage.getItem('loggedInUserDetails');
+    this.user = loggedInUserDetails ? JSON.parse(loggedInUserDetails) : {};
+
     this.profileForm = this.formBuilder.group({
       firstName: [this.user.firstName || '', Validators.required],
       lastName: [this.user.lastName || '', Validators.required],
